@@ -1,2 +1,2 @@
 # designPatterns
-This is a project learn design patterns
+This is a project to learn design patterns
