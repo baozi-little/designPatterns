@@ -21,6 +21,9 @@ import com.example.designPatterns.singleton.lazy.service.DoubleCheckLazyMinister
 import com.example.designPatterns.singleton.lazy.service.LazyMinister;
 import com.example.designPatterns.singleton.lazy.service.SyncLazyMinister;
 import com.example.designPatterns.singleton.service.Minister;
+import com.example.designPatterns.templatemethod.HummerH1Model;
+import com.example.designPatterns.templatemethod.HummerH2Model;
+import com.example.designPatterns.templatemethod.HummerModel;
 
 @SpringBootTest
 class DesignPatternsApplicationTests {
@@ -119,5 +122,14 @@ class DesignPatternsApplicationTests {
 		gamePlayerProxy.killBoss();
 		gamePlayerProxy.upgrade();
 	}
+	
+	// 模板方法模式（基本方法一般不对外暴露，访问权限应该设计为protected类型；模板方法一般不允许重写，应该使用final修饰）
+	@Test
+	void templateMethodTest() {
+		HummerModel hummerH1Model = new HummerH1Model();
+		hummerH1Model.run();
+		HummerModel hummerH2Model = new HummerH2Model();
+		hummerH2Model.run();
+ 	}
 
 }
