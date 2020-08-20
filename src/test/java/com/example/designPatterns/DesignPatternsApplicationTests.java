@@ -13,6 +13,9 @@ import com.example.designPatterns.factory.service.Human;
 import com.example.designPatterns.factory.service.HumanFactory;
 import com.example.designPatterns.factory.service.WhiteHuman;
 import com.example.designPatterns.factory.service.YellowHuman;
+import com.example.designPatterns.proxy.GamePlayer;
+import com.example.designPatterns.proxy.GamePlayerProxy;
+import com.example.designPatterns.proxy.IGamePlayer;
 import com.example.designPatterns.singleton.extend.service.ExtendMinister;
 import com.example.designPatterns.singleton.lazy.service.DoubleCheckLazyMinister;
 import com.example.designPatterns.singleton.lazy.service.LazyMinister;
@@ -102,6 +105,19 @@ class DesignPatternsApplicationTests {
 		yellowHuman.talk();
 		yellowHuman.gender();
 
+	}
+	
+	// 代理模式
+	@Test
+	void proxyTest() {
+		IGamePlayer gamePlayer = new GamePlayer("张三");
+		// 帮张三代练
+		IGamePlayer gamePlayerProxy = new GamePlayerProxy(gamePlayer);
+		// 用张三的账号密码登录
+		gamePlayerProxy.login("张三", "123456");
+		// 代练打怪升级
+		gamePlayerProxy.killBoss();
+		gamePlayerProxy.upgrade();
 	}
 
 }
