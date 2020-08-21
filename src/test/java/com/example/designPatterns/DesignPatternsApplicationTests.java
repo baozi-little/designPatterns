@@ -6,6 +6,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.example.designPatterns.abstractfactory.service.AHuman;
 import com.example.designPatterns.abstractfactory.service.FemaleHumanFactory;
 import com.example.designPatterns.abstractfactory.service.MaleHumanFactory;
+import com.example.designPatterns.builder.BenzBuilder;
+import com.example.designPatterns.builder.CarModel;
+import com.example.designPatterns.builder.Director;
 import com.example.designPatterns.abstractfactory.service.MaleBlackHuman;
 import com.example.designPatterns.factory.service.AbstractHumanFactory;
 import com.example.designPatterns.factory.service.BlackHuman;
@@ -131,5 +134,27 @@ class DesignPatternsApplicationTests {
 		HummerModel hummerH2Model = new HummerH2Model();
 		hummerH2Model.run();
  	}
+	
+	// 建造者模式（融合了模板方法模式）
+	/**
+	 * 另：
+	 * 	工厂模式；创建类模式，侧重于零件的实现，不考虑装配顺序
+	 * 	模板方法模式：非创建类模式，侧重于零件的实现，有特定的装配顺序
+	 * 	建造者模式：创建类模式，侧重于零件的装配顺序
+	 * 
+	 */
+	@Test
+	void builderTest() {
+
+		Director director = new Director();
+		CarModel aBenzModel = director.getABenzModel();
+		aBenzModel.run();
+		CarModel bBenzModel = director.getBBenzModel();
+		bBenzModel.run();
+		CarModel abmwModel = director.getABMWModel();
+		abmwModel.run();
+		
+		// 扩展：只需要修改导演类，导演类可以定义多种零件的装配顺序
+	}
 
 }
