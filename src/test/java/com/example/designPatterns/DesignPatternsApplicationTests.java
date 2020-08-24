@@ -1,21 +1,23 @@
 package com.example.designPatterns;
 
+import java.util.Random;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.example.designPatterns.abstractfactory.service.AHuman;
 import com.example.designPatterns.abstractfactory.service.FemaleHumanFactory;
 import com.example.designPatterns.abstractfactory.service.MaleHumanFactory;
-import com.example.designPatterns.builder.BenzBuilder;
 import com.example.designPatterns.builder.CarModel;
 import com.example.designPatterns.builder.Director;
-import com.example.designPatterns.abstractfactory.service.MaleBlackHuman;
 import com.example.designPatterns.factory.service.AbstractHumanFactory;
 import com.example.designPatterns.factory.service.BlackHuman;
 import com.example.designPatterns.factory.service.Human;
 import com.example.designPatterns.factory.service.HumanFactory;
 import com.example.designPatterns.factory.service.WhiteHuman;
 import com.example.designPatterns.factory.service.YellowHuman;
+import com.example.designPatterns.prototype.AdvTemplate;
+import com.example.designPatterns.prototype.Mail;
 import com.example.designPatterns.proxy.GamePlayer;
 import com.example.designPatterns.proxy.GamePlayerProxy;
 import com.example.designPatterns.proxy.IGamePlayer;
@@ -112,7 +114,7 @@ class DesignPatternsApplicationTests {
 		yellowHuman.gender();
 
 	}
-	
+
 	// 代理模式
 	@Test
 	void proxyTest() {
@@ -125,7 +127,7 @@ class DesignPatternsApplicationTests {
 		gamePlayerProxy.killBoss();
 		gamePlayerProxy.upgrade();
 	}
-	
+
 	// 模板方法模式（基本方法一般不对外暴露，访问权限应该设计为protected类型；模板方法一般不允许重写，应该使用final修饰）
 	@Test
 	void templateMethodTest() {
@@ -133,14 +135,12 @@ class DesignPatternsApplicationTests {
 		hummerH1Model.run();
 		HummerModel hummerH2Model = new HummerH2Model();
 		hummerH2Model.run();
- 	}
-	
+	}
+
 	// 建造者模式（融合了模板方法模式）
 	/**
-	 * 另：
-	 * 	工厂模式；创建类模式，侧重于零件的实现，不考虑装配顺序
-	 * 	模板方法模式：非创建类模式，侧重于零件的实现，有特定的装配顺序
-	 * 	建造者模式：创建类模式，侧重于零件的装配顺序
+	 * 另： 工厂模式；创建类模式，侧重于零件的实现，不考虑装配顺序 模板方法模式：非创建类模式，侧重于零件的实现，有特定的装配顺序
+	 * 建造者模式：创建类模式，侧重于零件的装配顺序
 	 * 
 	 */
 	@Test
@@ -153,8 +153,54 @@ class DesignPatternsApplicationTests {
 		bBenzModel.run();
 		CarModel abmwModel = director.getABMWModel();
 		abmwModel.run();
-		
+
 		// 扩展：只需要修改导演类，导演类可以定义多种零件的装配顺序
+	}
+
+	// 原型模式（其实就是使用Object的clone()来拷贝对象）
+	/**
+	 * 使用场景：
+	 * 	当需要大量创建有共同属性的对象时，可以使用原型模式（对象拷贝）来实现，以节约new产生的大量开支。
+	 *设计的知识点：
+	 *	1.创建对象的方式：new、clone、反射
+	 *	2.浅拷贝与深拷贝：
+	 *		浅拷贝：
+	 *			只有基本数据类型和string会被拷贝，其它引用类型是不会被拷贝的，如ArrayList，会共用一块堆内存，这就是浅拷贝。
+	 *		深拷贝：
+	 *			如果需要实现深拷贝，可以在clone()内调用该引用类型属性的clone方法，如arrayList.clone()。
+	 *	3.Cloneable与clone()的关系：
+	 *		Cloneable是java的一个接口，里面没有方法。起到标记的作用。
+	 *		clone()：Object中的方法，对象拷贝的具体实现。
+	 *		注意：想要实现对象的拷贝，必须要实现Cloneable和重写clone()，因为Cloneable是拷贝的前提，clone()在Object中的访问权限为protected。
+	 */
+	@Test
+	void prototypeTest() {
+
+		// 发十封邮件
+		int MAX_COUNT = 10;
+
+		AdvTemplate advTemplate = new AdvTemplate();
+		// 创建对象并设置公共属性
+		Mail mail = new Mail(advTemplate);
+		mail.setTail("XX银行版权所有");
+
+		int i = 0;
+		while (i < MAX_COUNT) {
+			// 拷贝
+			Mail cloneMail = mail.clone();
+			// 赋值个性
+			cloneMail.setAppellation(new Random().nextInt() + "先生/女士");
+			cloneMail.setReceiver(new Random().nextInt(100000) + "@163.com");
+			i++;
+			// 发邮件
+			sendMail(cloneMail);
+		}
+
+	}
+
+	// 发送邮件（实际应用中一般设计为多线程）
+	void sendMail(Mail mail) {
+		System.out.println(" 标题：" + mail.getSubject() + "\t 收件人： " + mail.getReceiver() + "\t... 发送 成功！");
 	}
 
 }
