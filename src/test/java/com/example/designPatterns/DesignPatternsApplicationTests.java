@@ -16,6 +16,11 @@ import com.example.designPatterns.factory.service.Human;
 import com.example.designPatterns.factory.service.HumanFactory;
 import com.example.designPatterns.factory.service.WhiteHuman;
 import com.example.designPatterns.factory.service.YellowHuman;
+import com.example.designPatterns.mediator.AbstractMediator;
+import com.example.designPatterns.mediator.Mediator;
+import com.example.designPatterns.mediator.Purchase;
+import com.example.designPatterns.mediator.Sale;
+import com.example.designPatterns.mediator.Stock;
 import com.example.designPatterns.prototype.AdvTemplate;
 import com.example.designPatterns.prototype.Mail;
 import com.example.designPatterns.proxy.GamePlayer;
@@ -203,4 +208,32 @@ class DesignPatternsApplicationTests {
 		System.out.println(" 标题：" + mail.getSubject() + "\t 收件人： " + mail.getReceiver() + "\t... 发送 成功！");
 	}
 
+	// 中介者模式
+	/**
+	 * 应用场景：类间依赖较多，呈网状结构时（多对多），可以使用中介者模式，让中介去依赖协调各个类，优化为星状结构（一对多）
+	 * 
+	 * 中介者模式与代理模式的区别（个人理解）：
+	 * 	代理模式：代理类和具体类继承同一个类，外界只能通过代理类去调用具体类，从而对外界屏蔽具体类
+	 * 	中介者模式：每个具体类都依赖相同的中介类，某些需要依赖其他具体类的方法无具体实现，而是直接调用中介类的方法，让中介类去依赖其他类从而实现业务
+	 */
+	@Test
+	void mediatorTest() {
+		
+		AbstractMediator mediator = new Mediator();
+		// 采购电脑
+//		Purchase purchase = new Purchase(mediator);
+//		purchase.buyComputer(10);
+		
+		// 销售电脑
+//		Sale sale = new Sale(mediator);
+//		sale.sellComputer(10);
+		
+		// 折扣销售
+//		Sale sale = new Sale(mediator);
+//		sale.offSale();
+		
+		// 清空仓库
+		Stock stock = new Stock(mediator);
+		stock.clearStock();
+	}
 }
