@@ -10,6 +10,10 @@ import com.example.designPatterns.abstractfactory.service.FemaleHumanFactory;
 import com.example.designPatterns.abstractfactory.service.MaleHumanFactory;
 import com.example.designPatterns.builder.CarModel;
 import com.example.designPatterns.builder.Director;
+import com.example.designPatterns.command.AddCodeCommand;
+import com.example.designPatterns.command.ChangeRequireCommand;
+import com.example.designPatterns.command.DeletePageCommand;
+import com.example.designPatterns.command.Invoker;
 import com.example.designPatterns.factory.service.AbstractHumanFactory;
 import com.example.designPatterns.factory.service.BlackHuman;
 import com.example.designPatterns.factory.service.Human;
@@ -235,5 +239,30 @@ class DesignPatternsApplicationTests {
 		// 清空仓库
 		Stock stock = new Stock(mediator);
 		stock.clearStock();
+	}
+	
+	// 命令模式
+	/**
+	 * 命令模式与建造者模式的异同：刚开始感觉挺像的（都是零件的组装），越想越感觉不像（从产品角度看，建造者是把零件组装成一个产品，命令模式是把多个小命令封装成一个大命令类）
+	 * 
+	 * 命令模式：将多个命令（方法）封装成一个命令类，一个命令类只执行一种指令，当命令越多，需要封装的命令类就越庞大。
+	 */
+	@Test
+	void commandTest() {
+		
+		Invoker invoker = new Invoker();
+		// 下达一个修改需求的命令
+		invoker.setCommand(new ChangeRequireCommand());
+		invoker.action();
+		
+		// 下达一个删除页面的命令
+		invoker.setCommand(new DeletePageCommand());
+		invoker.action();
+		
+		// 下达一个增加功能的命令
+		invoker.setCommand(new AddCodeCommand());
+		invoker.action();
+		
+		// 如果还想下达一个删除功能的命令，增加一个DeleteCodeCommand类即可
 	}
 }
