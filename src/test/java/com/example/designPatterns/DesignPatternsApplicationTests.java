@@ -30,6 +30,9 @@ import com.example.designPatterns.prototype.Mail;
 import com.example.designPatterns.proxy.GamePlayer;
 import com.example.designPatterns.proxy.GamePlayerProxy;
 import com.example.designPatterns.proxy.IGamePlayer;
+import com.example.designPatterns.resopnsibilitychain.DefaultChain;
+import com.example.designPatterns.resopnsibilitychain.IWomen;
+import com.example.designPatterns.resopnsibilitychain.Women;
 import com.example.designPatterns.singleton.extend.service.ExtendMinister;
 import com.example.designPatterns.singleton.lazy.service.DoubleCheckLazyMinister;
 import com.example.designPatterns.singleton.lazy.service.LazyMinister;
@@ -264,5 +267,31 @@ class DesignPatternsApplicationTests {
 		invoker.action();
 		
 		// 如果还想下达一个删除功能的命令，增加一个DeleteCodeCommand类即可
+	}
+	
+	// 责任链模式（融合了模板方法模式）
+	/**
+	 * 基于递归来实现
+	 * 优缺点：
+	 * 	优点：调用者不需要知道对应的责任人是谁，不需要做臃肿的if-else
+	 * 	缺点：链子过长，对性能的影响很大，其实就是递归的缺点
+	 * 
+	 * 扩展：可以封装不同链子来处理不同业务
+	 */
+	@Test
+	void responsibilityChainTest() {
+		
+		// 使用默认链
+		DefaultChain defaultChain = new DefaultChain();
+		
+		Random random = new Random();
+		
+		IWomen women;
+		for (int i = 0; i < 5; i++) {
+			// 随机挑选女性
+			women = new Women(random.nextInt(4), "我要去逛街。");
+			defaultChain.handle(women);
+			
+		}
 	}
 }
