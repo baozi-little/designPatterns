@@ -14,6 +14,10 @@ import com.example.designPatterns.command.AddCodeCommand;
 import com.example.designPatterns.command.ChangeRequireCommand;
 import com.example.designPatterns.command.DeletePageCommand;
 import com.example.designPatterns.command.Invoker;
+import com.example.designPatterns.decorator.FouthGradeSchoolReport;
+import com.example.designPatterns.decorator.HighScoreDecorator;
+import com.example.designPatterns.decorator.SchoolReport;
+import com.example.designPatterns.decorator.SortDecorator;
 import com.example.designPatterns.factory.service.AbstractHumanFactory;
 import com.example.designPatterns.factory.service.BlackHuman;
 import com.example.designPatterns.factory.service.Human;
@@ -293,5 +297,32 @@ class DesignPatternsApplicationTests {
 			defaultChain.handle(women);
 			
 		}
+	}
+	
+	// 装饰模式
+	/**
+	 * 装饰模式与代理模式的异同：
+	 * 	相同点：具体类和 装饰类\代理类 都是继承（实现）同一个抽象类（接口），外部不直接调用具体类，而是调用对应的 装饰类\代理类
+	 * 	不同点：
+	 * 		代理模式：外部不知道代理委托了另一个对象，主要起到屏蔽的作用（在代理类new具体类）
+	 * 		装饰模式：外部指定使用哪个修饰类，而且指定的修饰类理论上可以无限多。
+	 * 
+	 */
+	// TODO 问题一：个人感觉这就是AOP模式，所以装饰模式与动态代理有什么区别呢？
+	@Test
+	void decoratorTest() {
+		SchoolReport schoolReport = null;
+		// 拿到成绩单
+		schoolReport = new FouthGradeSchoolReport();
+		// 修饰一（班级最高分）
+		schoolReport = new HighScoreDecorator(schoolReport);
+		// 修饰二（班级排名）
+		schoolReport = new SortDecorator(schoolReport);
+		// 成绩单内容
+		schoolReport.report();
+		// 家长签字
+		schoolReport.sign("张三");
+		
+		// 扩展（如果需要增加更多的修饰，可以新建几个Decorator的子类，然后像以上一样new出来即可）
 	}
 }
