@@ -42,6 +42,10 @@ import com.example.designPatterns.singleton.lazy.service.DoubleCheckLazyMinister
 import com.example.designPatterns.singleton.lazy.service.LazyMinister;
 import com.example.designPatterns.singleton.lazy.service.SyncLazyMinister;
 import com.example.designPatterns.singleton.service.Minister;
+import com.example.designPatterns.strategy.BackDoor;
+import com.example.designPatterns.strategy.BlockEnemy;
+import com.example.designPatterns.strategy.Context;
+import com.example.designPatterns.strategy.GivenGreenLight;
 import com.example.designPatterns.templatemethod.HummerH1Model;
 import com.example.designPatterns.templatemethod.HummerH2Model;
 import com.example.designPatterns.templatemethod.HummerModel;
@@ -324,5 +328,29 @@ class DesignPatternsApplicationTests {
 		schoolReport.sign("张三");
 		
 		// 扩展（如果需要增加更多的修饰，可以新建几个Decorator的子类，然后像以上一样new出来即可）
+	}
+	
+	// 策略模式
+	/**
+	 *策略模式与代理模式的区别：
+	 * 	策略 模式 的 封装 角色 和 被 封装 的 策略 类 不用 是 同一个 接口， 如果 是 同一个 接口 那就 成为 了 代理模式。
+	 * 	
+	 * 它的定义为：定义 一组 算法， 将 每个 算法 都 封装 起来， 并且 使它 们 之间 可以 互换。
+	 * 
+	 * 其实就是继承和多态的实现而已。
+	 */
+	@Test
+	void strategyTest() {
+		// 锦囊
+		Context context;
+		// 妙计一
+		context = new Context(new BackDoor());
+		context.operate();
+		// 妙计二
+		context = new Context(new GivenGreenLight());
+		context.operate();
+		// 妙计三
+		context = new Context(new BlockEnemy());
+		context.operate();
 	}
 }
