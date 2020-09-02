@@ -8,6 +8,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.example.designPatterns.abstractfactory.service.AHuman;
 import com.example.designPatterns.abstractfactory.service.FemaleHumanFactory;
 import com.example.designPatterns.abstractfactory.service.MaleHumanFactory;
+import com.example.designPatterns.adapter.IUserInfo;
+import com.example.designPatterns.adapter.OtherUserInfo;
+import com.example.designPatterns.adapter.UserInfo;
 import com.example.designPatterns.builder.CarModel;
 import com.example.designPatterns.builder.Director;
 import com.example.designPatterns.command.AddCodeCommand;
@@ -352,5 +355,36 @@ class DesignPatternsApplicationTests {
 		// 妙计三
 		context = new Context(new BlockEnemy());
 		context.operate();
+	}
+	
+	// 适配器模式
+	/**
+	 * 使用场景：适用于投产中的项目，需要做一些扩展的时候，用来适配原来的项目，只改动小部分代码来实现适配。在项目设计阶段一般不考虑使用该模式。
+	 * 
+	 * 当不需要这个适配的时候可以直接去掉而不影响原来的项目正常运行。类似于一个灵活的构件，想用就用，不想用就卸载。
+	 */
+	@Test
+	void adapterTest() {
+		// 投产正常运行的项目
+//		IUserInfo userInfo = new UserInfo();
+		
+		// 适配其他公司之后的项目
+		IUserInfo userInfo;
+		Random random = new Random();
+		int selected = random.nextInt(2) + 1;
+		if (selected == 1) {
+			// 获取原来的用户
+			userInfo = new UserInfo();
+		}else {
+			// 获取其他公司的用户
+			userInfo = new OtherUserInfo();
+		}
+		
+		userInfo.getUserName();
+		userInfo.getHomeAddress();
+		userInfo.getHomeTelNumber();
+		userInfo.getOfficeTelNumber();
+		userInfo.getJobPosition();
+		userInfo.getMobileNumber();
 	}
 }
