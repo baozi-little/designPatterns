@@ -27,6 +27,9 @@ import com.example.designPatterns.factory.service.Human;
 import com.example.designPatterns.factory.service.HumanFactory;
 import com.example.designPatterns.factory.service.WhiteHuman;
 import com.example.designPatterns.factory.service.YellowHuman;
+import com.example.designPatterns.iterator.IProject;
+import com.example.designPatterns.iterator.IProjectIterator;
+import com.example.designPatterns.iterator.Project;
 import com.example.designPatterns.mediator.AbstractMediator;
 import com.example.designPatterns.mediator.Mediator;
 import com.example.designPatterns.mediator.Purchase;
@@ -386,5 +389,34 @@ class DesignPatternsApplicationTests {
 		userInfo.getOfficeTelNumber();
 		userInfo.getJobPosition();
 		userInfo.getMobileNumber();
+	}
+	
+	// 迭代器模式（了解即可）
+	/**
+	 * 想要遍历容器里的所有对象，就可以使用迭代器模式去实现
+	 * 
+	 * Java中多个接口继承了迭代器接口，所以我们直接使用即可，如：ArrayList可以使用iterator()方法获取迭代器
+	 * 
+	 * for循环之所以能够遍历，也是因为实现了迭代器
+	 * 
+	 * 由于很多地方封装了迭代器，我们一般不会自己去封装一个迭代器，所以这个模式基本不会使用，有很多人已经把迭代器模式从设计模式去除。
+	 * 
+	 */
+	@Test
+	void iteratorTest() {
+		//定义 一个 List， 存放 所有 的 项目 对象 
+		IProject project = new Project(); 
+		//增加 星球 大战 项目 
+		project. add(" 星球 大战 项目 ", 10, 100000); 
+		//增加 扭转 时空 项目 
+		project. add(" 扭转 时空 项目", 100, 10000000); 
+		//增加 超人 改造 项目 
+		project. add(" 超人 改造 项目", 10000, 1000000000);
+
+		// 获得迭代器
+		IProjectIterator iterator = project.iterator();
+		while (iterator.hasNext()) {
+			System.out.println(iterator.next().getProjectInfo());
+		}
 	}
 }
