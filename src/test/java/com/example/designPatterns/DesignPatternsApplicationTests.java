@@ -1,5 +1,6 @@
 package com.example.designPatterns;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,9 @@ import com.example.designPatterns.command.AddCodeCommand;
 import com.example.designPatterns.command.ChangeRequireCommand;
 import com.example.designPatterns.command.DeletePageCommand;
 import com.example.designPatterns.command.Invoker;
+import com.example.designPatterns.composite.Branch;
+import com.example.designPatterns.composite.Corp;
+import com.example.designPatterns.composite.Leaf;
 import com.example.designPatterns.decorator.FouthGradeSchoolReport;
 import com.example.designPatterns.decorator.HighScoreDecorator;
 import com.example.designPatterns.decorator.SchoolReport;
@@ -185,19 +189,13 @@ class DesignPatternsApplicationTests {
 
 	// 原型模式（其实就是使用Object的clone()来拷贝对象）
 	/**
-	 * 使用场景：
-	 * 	当需要大量创建有共同属性的对象时，可以使用原型模式（对象拷贝）来实现，以节约new产生的大量开支。
-	 *设计的知识点：
-	 *	1.创建对象的方式：new、clone、反射
-	 *	2.浅拷贝与深拷贝：
-	 *		浅拷贝：
-	 *			只有基本数据类型和string会被拷贝，其它引用类型是不会被拷贝的，如ArrayList，会共用一块堆内存，这就是浅拷贝。
-	 *		深拷贝：
-	 *			如果需要实现深拷贝，可以在clone()内调用该引用类型属性的clone方法，如arrayList.clone()。
-	 *	3.Cloneable与clone()的关系：
-	 *		Cloneable是java的一个接口，里面没有方法。起到标记的作用。
-	 *		clone()：Object中的方法，对象拷贝的具体实现。
-	 *		注意：想要实现对象的拷贝，必须要实现Cloneable和重写clone()，因为Cloneable是拷贝的前提，clone()在Object中的访问权限为protected。
+	 * 使用场景： 当需要大量创建有共同属性的对象时，可以使用原型模式（对象拷贝）来实现，以节约new产生的大量开支。 设计的知识点：
+	 * 1.创建对象的方式：new、clone、反射 2.浅拷贝与深拷贝： 浅拷贝：
+	 * 只有基本数据类型和string会被拷贝，其它引用类型是不会被拷贝的，如ArrayList，会共用一块堆内存，这就是浅拷贝。 深拷贝：
+	 * 如果需要实现深拷贝，可以在clone()内调用该引用类型属性的clone方法，如arrayList.clone()。
+	 * 3.Cloneable与clone()的关系： Cloneable是java的一个接口，里面没有方法。起到标记的作用。
+	 * clone()：Object中的方法，对象拷贝的具体实现。
+	 * 注意：想要实现对象的拷贝，必须要实现Cloneable和重写clone()，因为Cloneable是拷贝的前提，clone()在Object中的访问权限为protected。
 	 */
 	@Test
 	void prototypeTest() {
@@ -233,31 +231,30 @@ class DesignPatternsApplicationTests {
 	/**
 	 * 应用场景：类间依赖较多，呈网状结构时（多对多），可以使用中介者模式，让中介去依赖协调各个类，优化为星状结构（一对多）
 	 * 
-	 * 中介者模式与代理模式的区别（个人理解）：
-	 * 	代理模式：代理类和具体类继承同一个类，外界只能通过代理类去调用具体类，从而对外界屏蔽具体类
-	 * 	中介者模式：每个具体类都依赖相同的中介类，某些需要依赖其他具体类的方法无具体实现，而是直接调用中介类的方法，让中介类去依赖其他类从而实现业务
+	 * 中介者模式与代理模式的区别（个人理解）： 代理模式：代理类和具体类继承同一个类，外界只能通过代理类去调用具体类，从而对外界屏蔽具体类
+	 * 中介者模式：每个具体类都依赖相同的中介类，某些需要依赖其他具体类的方法无具体实现，而是直接调用中介类的方法，让中介类去依赖其他类从而实现业务
 	 */
 	@Test
 	void mediatorTest() {
-		
+
 		AbstractMediator mediator = new Mediator();
 		// 采购电脑
 //		Purchase purchase = new Purchase(mediator);
 //		purchase.buyComputer(10);
-		
+
 		// 销售电脑
 //		Sale sale = new Sale(mediator);
 //		sale.sellComputer(10);
-		
+
 		// 折扣销售
 //		Sale sale = new Sale(mediator);
 //		sale.offSale();
-		
+
 		// 清空仓库
 		Stock stock = new Stock(mediator);
 		stock.clearStock();
 	}
-	
+
 	// 命令模式
 	/**
 	 * 命令模式与建造者模式的异同：刚开始感觉挺像的（都是零件的组装），越想越感觉不像（从产品角度看，建造者是把零件组装成一个产品，命令模式是把多个小命令封装成一个大命令类）
@@ -266,56 +263,51 @@ class DesignPatternsApplicationTests {
 	 */
 	@Test
 	void commandTest() {
-		
+
 		Invoker invoker = new Invoker();
 		// 下达一个修改需求的命令
 		invoker.setCommand(new ChangeRequireCommand());
 		invoker.action();
-		
+
 		// 下达一个删除页面的命令
 		invoker.setCommand(new DeletePageCommand());
 		invoker.action();
-		
+
 		// 下达一个增加功能的命令
 		invoker.setCommand(new AddCodeCommand());
 		invoker.action();
-		
+
 		// 如果还想下达一个删除功能的命令，增加一个DeleteCodeCommand类即可
 	}
-	
+
 	// 责任链模式（融合了模板方法模式）
 	/**
-	 * 基于递归来实现
-	 * 优缺点：
-	 * 	优点：调用者不需要知道对应的责任人是谁，不需要做臃肿的if-else
-	 * 	缺点：链子过长，对性能的影响很大，其实就是递归的缺点
+	 * 基于递归来实现 优缺点： 优点：调用者不需要知道对应的责任人是谁，不需要做臃肿的if-else 缺点：链子过长，对性能的影响很大，其实就是递归的缺点
 	 * 
 	 * 扩展：可以封装不同链子来处理不同业务
 	 */
 	@Test
 	void responsibilityChainTest() {
-		
+
 		// 使用默认链
 		DefaultChain defaultChain = new DefaultChain();
-		
+
 		Random random = new Random();
-		
+
 		IWomen women;
 		for (int i = 0; i < 5; i++) {
 			// 随机挑选女性
 			women = new Women(random.nextInt(4), "我要去逛街。");
 			defaultChain.handle(women);
-			
+
 		}
 	}
-	
+
 	// 装饰模式
 	/**
-	 * 装饰模式与代理模式的异同：
-	 * 	相同点：具体类和 装饰类\代理类 都是继承（实现）同一个抽象类（接口），外部不直接调用具体类，而是调用对应的 装饰类\代理类
-	 * 	不同点：
-	 * 		代理模式：外部不知道代理委托了另一个对象，主要起到屏蔽的作用（在代理类new具体类）
-	 * 		装饰模式：外部指定使用哪个修饰类，而且指定的修饰类理论上可以无限多。
+	 * 装饰模式与代理模式的异同： 相同点：具体类和 装饰类\代理类 都是继承（实现）同一个抽象类（接口），外部不直接调用具体类，而是调用对应的 装饰类\代理类
+	 * 不同点： 代理模式：外部不知道代理委托了另一个对象，主要起到屏蔽的作用（在代理类new具体类）
+	 * 装饰模式：外部指定使用哪个修饰类，而且指定的修饰类理论上可以无限多。
 	 * 
 	 */
 	// TODO 问题一：个人感觉这就是AOP模式，所以装饰模式与动态代理有什么区别呢？
@@ -332,15 +324,15 @@ class DesignPatternsApplicationTests {
 		schoolReport.report();
 		// 家长签字
 		schoolReport.sign("张三");
-		
+
 		// 扩展（如果需要增加更多的修饰，可以新建几个Decorator的子类，然后像以上一样new出来即可）
 	}
-	
+
 	// 策略模式
 	/**
-	 *策略模式与代理模式的区别：
-	 * 	策略 模式 的 封装 角色 和 被 封装 的 策略 类 不用 是 同一个 接口， 如果 是 同一个 接口 那就 成为 了 代理模式。
-	 * 	
+	 * 策略模式与代理模式的区别： 策略 模式 的 封装 角色 和 被 封装 的 策略 类 不用 是 同一个 接口， 如果 是 同一个 接口 那就 成为 了
+	 * 代理模式。
+	 * 
 	 * 它的定义为：定义 一组 算法， 将 每个 算法 都 封装 起来， 并且 使它 们 之间 可以 互换。
 	 * 
 	 * 其实就是继承和多态的实现而已。
@@ -359,7 +351,7 @@ class DesignPatternsApplicationTests {
 		context = new Context(new BlockEnemy());
 		context.operate();
 	}
-	
+
 	// 适配器模式
 	/**
 	 * 使用场景：适用于投产中的项目，需要做一些扩展的时候，用来适配原来的项目，只改动小部分代码来实现适配。在项目设计阶段一般不考虑使用该模式。
@@ -370,7 +362,7 @@ class DesignPatternsApplicationTests {
 	void adapterTest() {
 		// 投产正常运行的项目
 //		IUserInfo userInfo = new UserInfo();
-		
+
 		// 适配其他公司之后的项目
 		IUserInfo userInfo;
 		Random random = new Random();
@@ -378,11 +370,11 @@ class DesignPatternsApplicationTests {
 		if (selected == 1) {
 			// 获取原来的用户
 			userInfo = new UserInfo();
-		}else {
+		} else {
 			// 获取其他公司的用户
 			userInfo = new OtherUserInfo();
 		}
-		
+
 		userInfo.getUserName();
 		userInfo.getHomeAddress();
 		userInfo.getHomeTelNumber();
@@ -390,33 +382,113 @@ class DesignPatternsApplicationTests {
 		userInfo.getJobPosition();
 		userInfo.getMobileNumber();
 	}
-	
+
 	// 迭代器模式（了解即可）
 	/**
 	 * 想要遍历容器里的所有对象，就可以使用迭代器模式去实现
 	 * 
 	 * Java中多个接口继承了迭代器接口，所以我们直接使用即可，如：ArrayList可以使用iterator()方法获取迭代器
 	 * 
-	 * for循环之所以能够遍历，也是因为实现了迭代器
+	 * foreach的底层也是实现了迭代器
 	 * 
 	 * 由于很多地方封装了迭代器，我们一般不会自己去封装一个迭代器，所以这个模式基本不会使用，有很多人已经把迭代器模式从设计模式去除。
 	 * 
 	 */
 	@Test
 	void iteratorTest() {
-		//定义 一个 List， 存放 所有 的 项目 对象 
-		IProject project = new Project(); 
-		//增加 星球 大战 项目 
-		project. add(" 星球 大战 项目 ", 10, 100000); 
-		//增加 扭转 时空 项目 
-		project. add(" 扭转 时空 项目", 100, 10000000); 
-		//增加 超人 改造 项目 
-		project. add(" 超人 改造 项目", 10000, 1000000000);
+		// 定义 一个 List， 存放 所有 的 项目 对象
+		IProject project = new Project();
+		// 增加 星球 大战 项目
+		project.add(" 星球 大战 项目 ", 10, 100000);
+		// 增加 扭转 时空 项目
+		project.add(" 扭转 时空 项目", 100, 10000000);
+		// 增加 超人 改造 项目
+		project.add(" 超人 改造 项目", 10000, 1000000000);
 
 		// 获得迭代器
 		IProjectIterator iterator = project.iterator();
 		while (iterator.hasNext()) {
 			System.out.println(iterator.next().getProjectInfo());
 		}
+	}
+
+	// 组合模式
+	/**
+	 * 组合模式与责任链模式：
+	 * 	都是基于递归实现，
+	 * 	责任链模式：使用链式结构的业务上
+	 * 	组合模式：使用树（Tree）结构的业务上
+	 */
+	@Test
+	void compositeTest() {
+		// 首先 是 组装 一个 组织 结构 出来
+		Branch ceo = compositeCorpTree();
+
+		// 首先 把 CEO 的 信息 打印 出来
+		System.out.println(ceo.getInfo());
+
+		// 然后 是 所有 员工 信息
+		System.out.println(getTreeInfo(ceo));
+
+	}
+
+	// 把 整个 树 组装 出来
+	public static Branch compositeCorpTree() {
+		// 首先 产生 总经理 CEO
+		Branch root = new Branch(" 王 大麻子", " 总经理", 100000);
+		// 把 三个 部门 经理 产生 出来
+		Branch developDep = new Branch(" 刘 大 瘸子", " 研发 部门 经理", 10000);
+		Branch salesDep = new Branch(" 马 二 拐子", " 销售 部门 经理", 20000);
+		Branch financeDep = new Branch(" 赵 三 驼 子", " 财务 部 经理", 30000);
+		// 再把 两个 开发 小组长 产生 出来
+		Branch firstDevGroup = new Branch(" 杨 三 乜 斜", " 开发 一组 组长", 5000);
+		Branch secondDevGroup = new Branch(" 吴 大 棒槌", " 开发 二 组 组长", 6000);
+		// 把 所有 的 小兵 都 产生 出来
+		Leaf a = new Leaf(" a", " 开发 人员", 2000);
+		Leaf b = new Leaf(" b", " 开发 人员", 2000);
+		Leaf c = new Leaf(" c", " 开发 人员", 2000);
+		Leaf d = new Leaf(" d", " 开发 人员", 2000);
+		Leaf h = new Leaf(" h", " 销售 人员", 5000);
+		Leaf i = new Leaf(" i", " 销售 人员", 4000);
+		Leaf j = new Leaf(" j", " 财务 人员", 5000);
+		Leaf k = new Leaf(" k", " CEO 秘书", 8000);
+		Leaf zhengLaoLiu = new Leaf(" 郑 老六", " 研发 部 副经理", 20000);
+		// 开始 组装
+		// CEO 下有 三个 部门 经理 和 一个 秘书
+		root.addSubordinate(k);
+		root.addSubordinate(developDep);
+		root.addSubordinate(salesDep);
+		root.addSubordinate(financeDep);
+		// 研发 部 经理
+		developDep.addSubordinate(zhengLaoLiu);
+		developDep.addSubordinate(firstDevGroup);
+		developDep.addSubordinate(secondDevGroup);
+		// 看看 两个 开发 小组 下有 什么
+		firstDevGroup.addSubordinate(a);
+		firstDevGroup.addSubordinate(b);
+		firstDevGroup.addSubordinate(c);
+		secondDevGroup.addSubordinate(d);
+		// 再看 销售部 下 的 人员 情况
+		salesDep.addSubordinate(h);
+		salesDep.addSubordinate(i);
+		// 最后 一个 财务
+		financeDep.addSubordinate(j);
+		return root;
+	}
+
+	// 遍历 整 棵树, 只要 给我 根 节点， 我 就能 遍历 出 所有 的 节点
+	public static String getTreeInfo(Branch root) {
+		ArrayList<Corp> subordinateList = root.getSubordinate();
+		String info = "";
+		for (Corp s : subordinateList) {
+			if (s instanceof Leaf) {
+				// 是 员工 就 直接 获得 信息
+				info = info + s.getInfo() + "\n";
+			} else { 
+				// 是个 小 头目
+				info = info + s.getInfo() + "\n" + getTreeInfo((Branch)s);
+			}
+		}
+		return info;
 	}
 }
