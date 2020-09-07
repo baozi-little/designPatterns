@@ -39,6 +39,9 @@ import com.example.designPatterns.mediator.Mediator;
 import com.example.designPatterns.mediator.Purchase;
 import com.example.designPatterns.mediator.Sale;
 import com.example.designPatterns.mediator.Stock;
+import com.example.designPatterns.observer.HanFeiZi;
+import com.example.designPatterns.observer.LiSi;
+import com.example.designPatterns.observer.Other;
 import com.example.designPatterns.prototype.AdvTemplate;
 import com.example.designPatterns.prototype.Mail;
 import com.example.designPatterns.proxy.GamePlayer;
@@ -490,5 +493,32 @@ class DesignPatternsApplicationTests {
 			}
 		}
 		return info;
+	}
+	
+	// 观察者模式（发布订阅模式）
+	/**
+	 * 其实发布订阅模式更容易理解，我们可以从字面上去理解这个模式
+	 * 	订阅：addObserver() 就是一个订阅的过程，谁要订阅就add进来
+	 * 	发布：自身的一个行为发生，会通知到订阅者从而订阅者做相应的处理，这个通知的行为就是发布。
+	 * 
+	 * 消息队列就使用了这个模式。
+	 * 
+	 * 扩展：观察者和被观察者都很容易扩展，只要实现对应的接口即可
+	 * 
+	 * 注意：其中一个观察者的动作缓慢或者动作死机都会导致程序出问题，异步处理是个比较好的解决方法。
+	 */
+	@Test
+	void observerTest() {
+		// 韩非子（被观察者类）
+		HanFeiZi hanFeiZi = new HanFeiZi();
+		// 观察者类
+		LiSi liSi = new LiSi();
+		Other other = new Other();
+		// 加入被观察者（被观察者如有行为变动需要通知如下观察者）
+		hanFeiZi.addObserver(liSi);
+		hanFeiZi.addObserver(other);
+		// 被观察者的行为变动
+		hanFeiZi.haveBreakfast();
+		hanFeiZi.haveFun();
 	}
 }
