@@ -25,6 +25,7 @@ import com.example.designPatterns.decorator.FouthGradeSchoolReport;
 import com.example.designPatterns.decorator.HighScoreDecorator;
 import com.example.designPatterns.decorator.SchoolReport;
 import com.example.designPatterns.decorator.SortDecorator;
+import com.example.designPatterns.facade.Facade;
 import com.example.designPatterns.factory.service.AbstractHumanFactory;
 import com.example.designPatterns.factory.service.BlackHuman;
 import com.example.designPatterns.factory.service.Human;
@@ -520,5 +521,24 @@ class DesignPatternsApplicationTests {
 		// 被观察者的行为变动
 		hanFeiZi.haveBreakfast();
 		hanFeiZi.haveFun();
+	}
+	
+	// 门面模式
+	/**
+	 * 其实就是对外封装一个（或多个）接口，确保接口（包括方法名、传参、返回值等）不变，但该接口的具体业务实现可以动态修改，
+	 * 以达到底层的业务变动不会影响到上层调用。这就是门面模式。
+	 * 
+	 * 《设计模式之禅》中使用邮局类（ModenPostOffice）作为门面，但后面又说到门面类不应该有具体的业务实现，
+	 * 所以我在最上层定义一个门面类（Facade）去调用邮局类，邮局类在这里作为一个子系统。
+	 * 
+	 * 项目投产中，门面类接口的定义不宜变动，否则将会出现上层调用大规模修改的局面
+	 */
+	@Test
+	void facadeTest() {
+		
+		Facade facade = new Facade();
+		String context = "hello,I'm ...";
+		String address = "in your heart";
+		facade.sendLetter(context, address);
 	}
 }
