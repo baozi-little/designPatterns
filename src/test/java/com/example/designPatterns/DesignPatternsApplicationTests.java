@@ -40,6 +40,8 @@ import com.example.designPatterns.mediator.Mediator;
 import com.example.designPatterns.mediator.Purchase;
 import com.example.designPatterns.mediator.Sale;
 import com.example.designPatterns.mediator.Stock;
+import com.example.designPatterns.memento.Boy;
+import com.example.designPatterns.memento.Caretaker;
 import com.example.designPatterns.observer.HanFeiZi;
 import com.example.designPatterns.observer.LiSi;
 import com.example.designPatterns.observer.Other;
@@ -418,10 +420,7 @@ class DesignPatternsApplicationTests {
 
 	// 组合模式
 	/**
-	 * 组合模式与责任链模式：
-	 * 	都是基于递归实现，
-	 * 	责任链模式：使用链式结构的业务上
-	 * 	组合模式：使用树（Tree）结构的业务上
+	 * 组合模式与责任链模式： 都是基于递归实现， 责任链模式：使用链式结构的业务上 组合模式：使用树（Tree）结构的业务上
 	 */
 	@Test
 	void compositeTest() {
@@ -488,19 +487,18 @@ class DesignPatternsApplicationTests {
 			if (s instanceof Leaf) {
 				// 是 员工 就 直接 获得 信息
 				info = info + s.getInfo() + "\n";
-			} else { 
+			} else {
 				// 是个 小 头目
-				info = info + s.getInfo() + "\n" + getTreeInfo((Branch)s);
+				info = info + s.getInfo() + "\n" + getTreeInfo((Branch) s);
 			}
 		}
 		return info;
 	}
-	
+
 	// 观察者模式（发布订阅模式）
 	/**
-	 * 其实发布订阅模式更容易理解，我们可以从字面上去理解这个模式
-	 * 	订阅：addObserver() 就是一个订阅的过程，谁要订阅就add进来
-	 * 	发布：自身的一个行为发生，会通知到订阅者从而订阅者做相应的处理，这个通知的行为就是发布。
+	 * 其实发布订阅模式更容易理解，我们可以从字面上去理解这个模式 订阅：addObserver() 就是一个订阅的过程，谁要订阅就add进来
+	 * 发布：自身的一个行为发生，会通知到订阅者从而订阅者做相应的处理，这个通知的行为就是发布。
 	 * 
 	 * 消息队列就使用了这个模式。
 	 * 
@@ -522,7 +520,7 @@ class DesignPatternsApplicationTests {
 		hanFeiZi.haveBreakfast();
 		hanFeiZi.haveFun();
 	}
-	
+
 	// 门面模式
 	/**
 	 * 其实就是对外封装一个（或多个）接口，确保接口（包括方法名、传参、返回值等）不变，但该接口的具体业务实现可以动态修改，
@@ -535,10 +533,42 @@ class DesignPatternsApplicationTests {
 	 */
 	@Test
 	void facadeTest() {
-		
+
 		Facade facade = new Facade();
 		String context = "hello,I'm ...";
 		String address = "in your heart";
 		facade.sendLetter(context, address);
+	}
+
+	// 备忘录模式
+	/**
+	 * 利用一个备忘录类对另一个类的状态做一个备份，方便这个类多次修改状态后能恢复初始化设置
+	 * 
+	 * 备忘录模式还是比较容易理解的，管理者类还不太理解，以后再求证吧
+	 * 
+	 * 数据库的事物回滚、数据库数据备份就可以使用备忘录模式去实现。
+	 */
+	@Test
+	void mementoTest() {
+		// 声明 出 主角
+		Boy boy = new Boy();
+		// 声明 出 备忘录 的 管理者
+		Caretaker caretaker = new Caretaker();
+		// 初始化 当前 状态
+		boy.setState(" 心情 很 棒！");
+		System.out.println("===== 男孩 现在 的 状态======");
+		System.out.println(boy.getState());
+		// 需要 记录 下 当前 状态 呀
+		caretaker.setMemento(boy.createMemento());
+
+		// 男孩 去 追 女孩， 状态 改变
+		boy.changeState();
+		System.out.println("\n===== 男孩 追 女孩子 后的 状态======");
+		System.out.println(boy.getState());
+		// 追 女孩 失败， 恢复 原状
+		boy.restoreMemento(caretaker.getMemento());
+		System.out.println("\n===== 男孩 恢复 后的 状态======");
+		System.out.println(boy.getState());
+
 	}
 }
