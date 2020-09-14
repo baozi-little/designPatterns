@@ -1,6 +1,7 @@
 package com.example.designPatterns;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
@@ -58,6 +59,7 @@ import com.example.designPatterns.singleton.lazy.service.DoubleCheckLazyMinister
 import com.example.designPatterns.singleton.lazy.service.LazyMinister;
 import com.example.designPatterns.singleton.lazy.service.SyncLazyMinister;
 import com.example.designPatterns.singleton.service.Minister;
+import com.example.designPatterns.state.Lift;
 import com.example.designPatterns.strategy.BackDoor;
 import com.example.designPatterns.strategy.BlockEnemy;
 import com.example.designPatterns.strategy.Context;
@@ -65,6 +67,10 @@ import com.example.designPatterns.strategy.GivenGreenLight;
 import com.example.designPatterns.templatemethod.HummerH1Model;
 import com.example.designPatterns.templatemethod.HummerH2Model;
 import com.example.designPatterns.templatemethod.HummerModel;
+import com.example.designPatterns.visitor.CommonEmployee;
+import com.example.designPatterns.visitor.Employee;
+import com.example.designPatterns.visitor.Manager;
+import com.example.designPatterns.visitor.Visitor;
 
 @SpringBootTest
 class DesignPatternsApplicationTests {
@@ -571,4 +577,66 @@ class DesignPatternsApplicationTests {
 		System.out.println(boy.getState());
 
 	}
+
+	// 访问者模式
+	/**
+	 * 访问者模式是迭代模式的扩充，可以遍历不同的对象，同时还能起到一个拦截器的作用
+	 * 
+	 * 在以下的例子中，访问者起到了遍历作用员工并打印一份报表的作用，如果需要改变报表的格式，可以实现多个Visitor即可
+	 * 
+	 * 员工的信息与打印报表的逻辑分开，符合单一职责原则
+	 * 
+	 * 缺点也很明确，如果增加一个员工角色，或者员工类属性的变动，上层的所有Visitor都要随之变动。
+	 */
+	@Test
+	void visitorTest() {
+		for (Employee emp : mockEmployee()) {
+			emp.accept(new Visitor());
+		}
+	}
+
+	// 模拟 出 公司 的 人员 情况， 我们 可以 想象 这个 数据 是 通过 持久 层 传递 过来 的
+	public static List<Employee> mockEmployee() {
+		List<Employee> empList = new ArrayList<Employee>();
+		// 产生 张三 这个 员工
+		CommonEmployee zhangSan = new CommonEmployee();
+		zhangSan.setJob(" 编写 Java 程序， 绝对 的 蓝领、 苦工 加 搬运工");
+		zhangSan.setName(" 张三");
+		zhangSan.setSalary(1800);
+		zhangSan.setSex(Employee.MALE);
+		empList.add(zhangSan); 
+		// 产生 李四 这个 员工
+		CommonEmployee liSi = new CommonEmployee();
+		liSi.setJob(" 页面 美工， 审美 素质 太 不流 行了！");
+		liSi.setName(" 李四");
+		liSi.setSalary(1900);
+		liSi.setSex(Employee.FEMALE);
+		empList.add(liSi);
+		// 再 产生 一个 经理
+		Manager wangWu = new Manager();
+		wangWu.setName(" 王 五");
+		wangWu.setPerformance(" 基本上 是 负值， 但是 我会 拍马屁 呀");
+		wangWu.setSalary(18750);
+		wangWu.setSex(Employee.MALE);
+		empList.add(wangWu);
+		return empList;
+
+	}
+	
+	// 状态模式
+	/**
+	 * 状态模式：把状态抽出来封装成一个类，避免类中的方法对状态进行多次的if-else判断，减轻臃肿。
+	 * 
+	 * 应用场景：一个类中状态牵制动作的需求，可以考虑状态模式
+	 */
+	@Test
+	void stateTest() {
+		Lift lift = new Lift();
+		lift.setLiftState(Lift.stoppingState);
+		lift.open();
+		lift.close();
+		lift.run();
+		lift.stop();
+	}
+
 }
