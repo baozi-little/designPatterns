@@ -1,6 +1,7 @@
 package com.example.designPatterns;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -33,6 +34,7 @@ import com.example.designPatterns.factory.service.Human;
 import com.example.designPatterns.factory.service.HumanFactory;
 import com.example.designPatterns.factory.service.WhiteHuman;
 import com.example.designPatterns.factory.service.YellowHuman;
+import com.example.designPatterns.interpreter.Calculator;
 import com.example.designPatterns.iterator.IProject;
 import com.example.designPatterns.iterator.IProjectIterator;
 import com.example.designPatterns.iterator.Project;
@@ -604,7 +606,7 @@ class DesignPatternsApplicationTests {
 		zhangSan.setName(" 张三");
 		zhangSan.setSalary(1800);
 		zhangSan.setSex(Employee.MALE);
-		empList.add(zhangSan); 
+		empList.add(zhangSan);
 		// 产生 李四 这个 员工
 		CommonEmployee liSi = new CommonEmployee();
 		liSi.setJob(" 页面 美工， 审美 素质 太 不流 行了！");
@@ -622,7 +624,7 @@ class DesignPatternsApplicationTests {
 		return empList;
 
 	}
-	
+
 	// 状态模式
 	/**
 	 * 状态模式：把状态抽出来封装成一个类，避免类中的方法对状态进行多次的if-else判断，减轻臃肿。
@@ -637,6 +639,28 @@ class DesignPatternsApplicationTests {
 		lift.close();
 		lift.run();
 		lift.stop();
+	}
+
+	// 解释器模式
+	/**
+	 * 用于处理发生频率比较高的需求，如：计算表达式。
+	 * 
+	 * 一般不自己手动实现，可以借助已经实现了的工具：
+	 * 	Expression4J、 MESP（ Math Expression String Parser）、 Jep 等 开源 的 解析 工具包
+	 */
+	@Test
+	void interpreterTest() {
+		// 表达式
+		String expStr = "a+b+c-d";
+		// 赋值
+		HashMap<String, Integer> var = new HashMap<String, Integer>();
+		var.put("a", 1);
+		var.put("b", 2);
+		var.put("c", 3);
+		var.put("d", 4);
+		Calculator cal = new Calculator(expStr);
+		System.out.println(" 运算 结果 为：" + expStr + "=" + cal.run(var));
+
 	}
 
 }
