@@ -34,6 +34,8 @@ import com.example.designPatterns.factory.service.Human;
 import com.example.designPatterns.factory.service.HumanFactory;
 import com.example.designPatterns.factory.service.WhiteHuman;
 import com.example.designPatterns.factory.service.YellowHuman;
+import com.example.designPatterns.flyweight.SignInfo;
+import com.example.designPatterns.flyweight.SignInfoFactory;
 import com.example.designPatterns.interpreter.Calculator;
 import com.example.designPatterns.iterator.IProject;
 import com.example.designPatterns.iterator.IProjectIterator;
@@ -645,8 +647,8 @@ class DesignPatternsApplicationTests {
 	/**
 	 * 用于处理发生频率比较高的需求，如：计算表达式。
 	 * 
-	 * 一般不自己手动实现，可以借助已经实现了的工具：
-	 * 	Expression4J、 MESP（ Math Expression String Parser）、 Jep 等 开源 的 解析 工具包
+	 * 一般不自己手动实现，可以借助已经实现了的工具： Expression4J、 MESP（ Math Expression String Parser）、
+	 * Jep 等 开源 的 解析 工具包
 	 */
 	@Test
 	void interpreterTest() {
@@ -660,6 +662,29 @@ class DesignPatternsApplicationTests {
 		var.put("d", 4);
 		Calculator cal = new Calculator(expStr);
 		System.out.println(" 运算 结果 为：" + expStr + "=" + cal.run(var));
+
+	}
+
+	// 享元模式
+	/**
+	 * 把创建好的对象存到池中，以便重复使用。它主要解决的对象的共享问题，如何建立多个可共享的细粒度对象则是其关注的重点。
+	 * 
+	 * 享元模式和单例模式有些相似，享元模式中，池中的一个对象对应一个单例模式。
+	 * 
+	 * 既然一个对象可以重复利用，高并发的问题也是必然需要我们去关注的。
+	 */
+	@Test
+	void flyweightTest() {
+		// 初始化 对象 池
+		for (int i = 0; i < 4; i++) {
+			String subject = "科目" + i;
+			// 初始化 地址
+			for (int j = 0; j < 30; j++) {
+				String key = subject + "考试地点" + j;
+				SignInfoFactory.getSignInfo(key);
+			}
+		}
+		SignInfo signInfo = SignInfoFactory.getSignInfo("科目1考试地点1");
 
 	}
 
