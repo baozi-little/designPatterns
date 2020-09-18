@@ -14,6 +14,10 @@ import com.example.designPatterns.abstractfactory.service.MaleHumanFactory;
 import com.example.designPatterns.adapter.IUserInfo;
 import com.example.designPatterns.adapter.OtherUserInfo;
 import com.example.designPatterns.adapter.UserInfo;
+import com.example.designPatterns.bridge.House;
+import com.example.designPatterns.bridge.HouseCorp;
+import com.example.designPatterns.bridge.IPad;
+import com.example.designPatterns.bridge.ShanZhaiCorp;
 import com.example.designPatterns.builder.CarModel;
 import com.example.designPatterns.builder.Director;
 import com.example.designPatterns.command.AddCodeCommand;
@@ -685,6 +689,33 @@ class DesignPatternsApplicationTests {
 			}
 		}
 		SignInfo signInfo = SignInfoFactory.getSignInfo("科目1考试地点1");
+
+	}
+
+	// 桥梁模式
+	/**
+	 * 把继承（强关联）变为聚合（弱关系）
+	 * 对于 比较 明确 不发 生 变化 的， 则 通过 继承 来 完成； 
+	 * 若不 能 确定 是否 会 发生 变化 的， 那就 认为是 会 发生 变化， 则 通过 桥梁 模式 来 解决， 这才 是一 个 完美 的 世界。
+	 * 
+	 * 如father，son，grandson中，grandson继承son继承father，father中有一个方法eat()，如果son想修改，必定会对grandson造成影响。
+	 * 使用桥梁模式优化：定义一个抽象类，抽象类中有eat()的具体实现，father，son，grandson都继承该抽象类，这时son想修改eat()，都不会对grandson产生影响。
+	 * 
+	 * 我想：这里的“桥”，就是实现类与抽象类的extends/implement吧
+	 */
+	@Test
+	void bridgeTest() {
+		House house = new House();
+		System.out.println("------- 房地产 公司 是 这样 运行 的-------");
+		// 先 找到 房地产 公司
+		HouseCorp houseCorp = new HouseCorp(house);
+		// 看 我怎 么 挣钱
+		houseCorp.makeMoney();
+		System.out.println("\n");
+		// 山寨 公司 生产 的 产品 很多， 不过 我 只要 指定 产品 就成 了
+		System.out.println("------- 山寨 公司 是 这样 运行 的-------");
+		ShanZhaiCorp shanZhaiCorp = new ShanZhaiCorp(new IPad());
+		shanZhaiCorp.makeMoney();
 
 	}
 
