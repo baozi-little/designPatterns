@@ -7,6 +7,8 @@ import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.cglib.proxy.InvocationHandler;
+import org.springframework.cglib.proxy.Proxy;
 
 import com.example.designPatterns.abstractfactory.AHuman;
 import com.example.designPatterns.abstractfactory.FemaleHumanFactory;
@@ -57,6 +59,7 @@ import com.example.designPatterns.prototype.Mail;
 import com.example.designPatterns.proxy.GamePlayer;
 import com.example.designPatterns.proxy.GamePlayerProxy;
 import com.example.designPatterns.proxy.IGamePlayer;
+import com.example.designPatterns.proxy.dynamic.GamePlayIH;
 import com.example.designPatterns.resopnsibilitychain.DefaultChain;
 import com.example.designPatterns.resopnsibilitychain.IWomen;
 import com.example.designPatterns.resopnsibilitychain.Women;
@@ -174,6 +177,34 @@ class DesignPatternsApplicationTests {
 		// 代练打怪升级
 		gamePlayerProxy.killBoss();
 		gamePlayerProxy.upgrade();
+	}
+
+	// 动态代理模式（AOP的实现原理）
+	/**
+	 * 实质上就是实现了JDK提供的动态代理接口InvocationHandler，从而获取一个代理者实例，该代理者可以代替具体类行动，这就是动态代理。
+	 * AOP实质上就是动态代理模式的应用，通过分析代理者的行为，从而在这个行为之前或者之后多做一些其他的事情，这就是面向切面编程。
+	 */
+	@Test
+	void dynamicProxyTest() {
+		// 定义 一个 痴迷 的 玩 家
+		IGamePlayer player = new GamePlayer(" 张三");
+		// 定义 一个 handler
+		InvocationHandler handler = new GamePlayIH(player);
+		// 开始 打 游戏， 记下 时间 戳
+		System.out.println(" 开始时 间 是： 2009- 8- 25 10: 45");
+		// 获得 类 的 class loader
+		ClassLoader cl = player.getClass().getClassLoader();
+		// 动态 产生 一个 代理者
+		IGamePlayer proxy = (IGamePlayer) Proxy.newProxyInstance(cl, new Class[] { IGamePlayer.class }, handler);
+		// 登录
+		proxy.login(" zhangSan", "password");
+		// 开始 杀 怪
+		proxy.killBoss();
+		// 升级
+		proxy.upgrade();
+		// 记录 结束 游戏 时间
+		System.out.println(" 结束 时间 是： 2009- 8- 26 03: 40");
+
 	}
 
 	// 模板方法模式（基本方法一般不对外暴露，访问权限应该设计为protected类型；模板方法一般不允许重写，应该使用final修饰）
@@ -328,7 +359,6 @@ class DesignPatternsApplicationTests {
 	 * 装饰模式：外部指定使用哪个修饰类，而且指定的修饰类理论上可以无限多。
 	 * 
 	 */
-	// TODO 问题一：个人感觉这就是AOP模式，所以装饰模式与动态代理有什么区别呢？
 	@Test
 	void decoratorTest() {
 		SchoolReport schoolReport = null;
@@ -692,9 +722,8 @@ class DesignPatternsApplicationTests {
 
 	// 桥梁模式
 	/**
-	 * 把继承（强关联）变为聚合（弱关系）
-	 * 对于 比较 明确 不发 生 变化 的， 则 通过 继承 来 完成； 
-	 * 若不 能 确定 是否 会 发生 变化 的， 那就 认为是 会 发生 变化， 则 通过 桥梁 模式 来 解决， 这才 是一 个 完美 的 世界。
+	 * 把继承（强关联）变为聚合（弱关系） 对于 比较 明确 不发 生 变化 的， 则 通过 继承 来 完成； 若不 能 确定 是否 会 发生 变化 的， 那就
+	 * 认为是 会 发生 变化， 则 通过 桥梁 模式 来 解决， 这才 是一 个 完美 的 世界。
 	 * 
 	 * 如father，son，grandson中，grandson继承son继承father，father中有一个方法eat()，如果son想修改，必定会对grandson造成影响。
 	 * 使用桥梁模式优化：定义一个抽象类，抽象类中有eat()的具体实现，father，son，grandson都继承该抽象类，这时son想修改eat()，都不会对grandson产生影响。
